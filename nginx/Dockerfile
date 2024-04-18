@@ -1,5 +1,7 @@
-FROM nginx:1.24.0-bullseye
+FROM openresty/openresty:1.25.3.1-0-centos
 
-COPY ngx_http_auth_jwt_module.so /etc/nginx/modules/
+RUN luarocks install lua-resty-jwt
+RUN luarocks show lua-resty-jwt
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY jwt_validation.lua /usr/src/jwt_validation.lua
+COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
