@@ -5,7 +5,7 @@ local validators = require "resty.jwt-validators"
 
 local ngx_time = ngx.time()
 
-local jwt_secret = "7fef53171a819619f0c8196f3f1d9d8e3539fbcd0a9441845799a897ef67f99c"
+local jwt_secret = "cec1bef7fd3de1834048ea7dfb582587f4f67de4dca69c3710fbf9ac8669bf39"
 
 -- Obtener el token JWT del encabezado de autorización
 local jwt_token = ngx.var.http_authorization
