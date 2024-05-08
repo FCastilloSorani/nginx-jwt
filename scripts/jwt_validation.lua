@@ -5,7 +5,7 @@ local validators = require "resty.jwt-validators"
 
 local ngx_time = ngx.time()
 
-local jwt_secret = "cec1bef7fd3de1834048ea7dfb582587f4f67de4dca69c3710fbf9ac8669bf39"
+local jwt_secret = os.getenv("TOKEN_SECRET")
 
 -- Obtener el token JWT del encabezado de autorización
 local jwt_token = ngx.var.http_authorization
@@ -21,7 +21,7 @@ if not jwt_token then
     }
 
     ngx.say(cjson.encode(response))
-    ngx.exit(ngx.HTTP_UNAUTHORIZED)
+    return ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end
 
 
@@ -39,7 +39,7 @@ if not token then
     }
 
     ngx.say(cjson.encode(response))
-    ngx.exit(ngx.HTTP_UNAUTHORIZED)
+    return ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end
 
 -- Verificar el token JWT con una clave secreta
@@ -56,11 +56,11 @@ if not jwt_obj.verified then
     }
 
     ngx.say(cjson.encode(response))
-    ngx.exit(ngx.HTTP_UNAUTHORIZED)
+    return ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end
 
 -- Verificar si el token está expirado
-if jwt_obj.payload.exp == nil then
+if jwt_obj.payload.exp and jwt_obj.payload.exp < ngx_time then
     ngx.status = ngx.HTTP_FORBIDDEN
     ngx.header.content_type = "application/json"
 
@@ -71,8 +71,5 @@ if jwt_obj.payload.exp == nil then
     }
 
     ngx.say(cjson.encode(response))
-    ngx.exit(ngx.HTTP_FORBIDDEN)
+    return ngx.exit(ngx.HTTP_FORBIDDEN)
 end
-
--- El token es válido y no está expirado, redirigir la solicitud
-ngx.req.set_uri("/")

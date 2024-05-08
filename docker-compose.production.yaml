@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:80"
     environment:
-      - TOKEN_SECRET=cec1bef7fd3de1834048ea7dfb582587f4f67de4dca69c3710fbf9ac8669bf39
+      - TOKEN_SECRET=98f121bd813d43594f7ec65d73d89086779d304af0a9e76b0b5c79ca29773767
     restart: on-failure
     networks:
       - mi-salta-network
